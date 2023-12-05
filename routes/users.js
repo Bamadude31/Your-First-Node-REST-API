@@ -19,14 +19,14 @@ router.get('/:id', getUsers, (req, res) => {
 
 // Creating one
 router.post('/', async (req, res) => {
-  const users = new Users({
+  const newUser = new Users({
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     username: req.body.username,
     password: req.body.password
   })
   try {
-    const newUsers = await Users.save()
+    const newUsers = await newUser.save()
     res.status(201).json(newUsers)
   } catch (err) {
     res.status(400).json({ message: err.message })
