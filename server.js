@@ -1,17 +1,38 @@
-require('dotenv').config()
-
+require('dotenv').config();
 const express = require('express')
 const app = express()
-const mongoose = require('mongoose')
 
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
-const db = mongoose.connection
-db.on('error', (error) => console.error(error))
-db.once('open', () => console.log('Connected to Database'))
+const pgp = require('pg-promise')();
+const db = pgp('postgres://postgres:password@localhost:5432/subscribers');
+
+// Example query
+// db.query(`
+//   CREATE TABLE users (
+//     id SERIAL PRIMARY KEY,
+//     name VARCHAR(255) NOT NULL,
+//     email VARCHAR(255) NOT NULL
+//   )
+// `)
+//   .then(() => {
+//     console.log('Users table created');
+//   })
+//   .catch(error => {
+//     console.error('Error creating users table', error);
+//   });
+
+// db.query('SELECT * FROM users')
+//   .then(data => {
+//     console.log(data)
+//     console.log("Connected to Database");
+//   })
+//   .catch(error => {
+//     console.error('Error executing query', error);
+//   });
+
 
 app.use(express.json())
 
-const subscribersRouter = require('./routes/subscribers')
-app.use('/subscribers', subscribersRouter)
+const usersRouter = require('./routes/users')
+app.use('/users', usersRouter)
 
-app.listen(3000, () => console.log('Server Started'))
+app.listen(8082, () => console.log('Server Started'))
