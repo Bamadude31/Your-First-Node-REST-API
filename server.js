@@ -11,11 +11,22 @@ app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false}));
 
-app.get('/route/users', function(req, res) {
-  // knex.SELECT().FROM(Users).then(function(Users)){
-  //   res.send(Users)
+app.get('/',(request,response) => {
+  response.send('Application is up and running')
+})
 
-  knex.raw('SELECT * FROM users').then(function(users) {
+app.get('/items',(request,response) =>{
+  knex('items')
+    .select('*')
+    .then(data => {
+      var itemNames = data.map(items => items.Item_Name)
+      response.json(itemNames);
+    })
+})
+
+
+app.get('/route/items', function(req, res) {
+  knex.raw('SELECT * FROM items').then(function(users) {
     res.send(users.rows);
   });
 });
@@ -30,17 +41,30 @@ app.use('/items', itemsRouter)
 
 app.listen(8082, () => console.log('Server Started'))
 
-
-// Example query
+//--------------------------------------
+// Example query for Users table
+//
 // db.query(`
-//   CREATE TABLE eshop (
+//   CREATE TABLE Users (
 //     id SERIAL PRIMARY KEY,
 //     first_name VARCHAR(255) NOT NULL,
 //     last_name VARCHAR(255) NOT NULL,
 //     username VARCHAR(255) NOT NULL,
-//     password VARCHAR(255) NOT NULL
-//   )
-// `)
+//     password VARCHAR(255) NOT NULL);
+// //   );
+//--------------------------------------
+// Example query for items table
+//db.query('
+    // CREATE TABLE items (
+    //   id SERIAL PRIMARY KEY,
+    //   UserId INTEGER NOT NULL,
+    //   Item_Name VARCHAR(255) NOT NULL,
+    //   Description VARCHAR(255) NOT NULL,
+    //   Quality INTEGER NOT NULL
+    // );
+
+
+// // `)
 //   .then(() => {
 //     console.log('eshop table created');
 //   })

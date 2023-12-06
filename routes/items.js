@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Items = require('../migrations/20231205220350_Items.js')
+const Items = require('../migrations/20231206024927_item.js')
 
 // Getting all
 router.get('/', async (req, res) => {

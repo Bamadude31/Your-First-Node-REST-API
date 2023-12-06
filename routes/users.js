@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Users = require('../migrations/20231205220339_users.js')
+const Users = require('../migrations/20231205220339_Users.js')
 
 // Getting all
 router.get('/', async (req, res) => {
