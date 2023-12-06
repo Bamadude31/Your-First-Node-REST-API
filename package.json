@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --require babel-register src/index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-node": "^0.0.1-security",
+    "babel-register": "^6.26.0",
+    "body-parser": "^1.20.2",
     "express": "^4.18.2",
+    "knex": "^3.0.1",
     "mongoose": "^5.13.21",
+    "pg": "^8.11.3",
     "pg-promise": "^11.5.4",
     "sequelize": "^6.35.1"
   },

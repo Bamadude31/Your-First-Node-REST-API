@@ -3,10 +3,10 @@
 exports.up = function(knex) {
   return knex.schema.createTable('items', function(table) {
     table.increments('id').primary();
-    table.number('UserId').notNullable();
+    table.increments('UserId').notNullable();
     table.string('Item_Name').notNullable();
     table.string('Description').notNullable();
-    table.number('Quality').notNullable();
+    table.integer('Quality').notNullable();
 })}
 
 
