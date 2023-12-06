@@ -19,17 +19,26 @@ app.get('/items',(request,response) =>{
   knex('items')
     .select('*')
     .then(data => {
-      var itemNames = data.map(items => items.Item_Name)
+      var itemNames = data.map(items => items)
       response.json(itemNames);
     })
 })
 
+app.post('/items', async (req, res) => {
+  try {
+    const newItem = await knex('items').insert({
+      UserId: req.body.UserId,
+      Item_Name: req.body.Item_Name,
+      Description: req.body.Description,
+      Quality: req.body.Quality
+    }).returning('*');
 
-app.get('/route/items', function(req, res) {
-  knex.raw('SELECT * FROM items').then(function(users) {
-    res.send(users.rows);
-  });
+    res.status(201).json(newItem);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 });
+
 
 
 const usersRouter = require('./routes/users')
@@ -83,3 +92,18 @@ app.listen(8082, () => console.log('Server Started'))
 
 
 
+
+// app.post('/items', async (req, res) => {
+//   const items = new Items({
+//     UserId: req.body.UserId,
+//     Item_Name: req.body.Item_Name,
+//     Description: req.body.Description,
+//     Quality: req.body.Quality
+//   })
+//   try {
+//     const newItems = await Items.save()
+//     res.status(201).json(newItems)
+//   } catch (err) {
+//     res.status(400).json({ message: err.message })
+//   }
+// });

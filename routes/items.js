@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message })
   }
-})
+});
 
 // Updating One
 router.patch('/:id', getItems, async (req, res) => {
