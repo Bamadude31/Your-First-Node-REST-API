@@ -3,64 +3,51 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const app = express()
 const pgp = require('pg-promise')();
-const db = pgp('postgres://postgres:password@localhost:5432/postgres');
+// const db = pgp('postgres://postgres:password@localhost:5432/postgres');
 const knexConfig = require('./knexfile.js');
 const knex = require('knex')(knexConfig);
+const port = 8082
+const db = require('./queries')
 
 app.use(express.json())
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({ extended: true}));
 
-app.get('/',(request,response) => {
-  response.send('Application is up and running')
+app.get('/', (request, response) => {
+  response.json({ info: 'CRUD application Z-Prefix' })
 })
 
-app.get('/items',(request,response) =>{
-  knex('items')
-    .select('*')
-    .then(data => {
-      var itemNames = data.map(items => items)
-      response.json(itemNames);
-    })
+app.get('/users', db.getUsers)
+app.get('/users/:id', db.getUserById)
+app.post('/users', db.createUser)
+app.put('/users/:id', db.updateUser)
+app.delete('/users/:id', db.deleteUser)
+
+app.get('/items', db.getItems);
+app.get('/items/:id', db.getItemById);
+app.post('/items', db.createItem);
+app.put('/items/:id', db.updateItem);
+app.delete('/items/:id', db.deleteItem);
+
+
+
+
+
+app.listen(port, () => {
+  console.log(`App running on port ${port}.`)
 })
-
-app.post('/items', async (req, res) => {
-  try {
-    const newItem = await knex('items').insert({
-      UserId: req.body.UserId,
-      Item_Name: req.body.Item_Name,
-      Description: req.body.Description,
-      Quality: req.body.Quality
-    }).returning('*');
-
-    res.status(201).json(newItem);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
-
-
-
-const usersRouter = require('./routes/users')
-app.use('/users', usersRouter)
-
-const itemsRouter = require('./routes/items')
-app.use('/items', itemsRouter)
-
-
-app.listen(8082, () => console.log('Server Started'))
 
 //--------------------------------------
 // Example query for Users table
 //
 // db.query(`
-//   CREATE TABLE Users (
-//     id SERIAL PRIMARY KEY,
-//     first_name VARCHAR(255) NOT NULL,
-//     last_name VARCHAR(255) NOT NULL,
-//     username VARCHAR(255) NOT NULL,
-//     password VARCHAR(255) NOT NULL);
-// //   );
+  // CREATE TABLE Users (
+  //   id SERIAL PRIMARY KEY,
+  //   first_name VARCHAR(255) NOT NULL,
+  //   last_name VARCHAR(255) NOT NULL,
+  //   username VARCHAR(255) NOT NULL,
+  //   password VARCHAR(255) NOT NULL);
+  // );
 //--------------------------------------
 // Example query for items table
 //db.query('
@@ -107,3 +94,37 @@ app.listen(8082, () => console.log('Server Started'))
 //     res.status(400).json({ message: err.message })
 //   }
 // });
+
+
+//////////////////////////////////////////////////////
+/* Backup queries if needed   */
+
+
+// app.get('/items',(request,response) =>{
+//   knex('items')
+//     .select('*')
+//     .then(data => {
+//       var itemNames = data.map(items => items)
+//       response.json(itemNames);
+//     })
+// })
+
+
+// app.post('/items', async (req, res) => {
+//   try {
+//     const newItem = await knex('items').insert({
+//       UserId: req.body.UserId,
+//       Item_Name: req.body.Item_Name,
+//       Description: req.body.Description,
+//       Quality: req.body.Quality
+//     }).returning('*');
+
+//     res.status(201).json(newItem);
+//   } catch (err) {
+//     res.status(400).json({ message: err.message });
+//   }
+// });
+// const usersRouter = require('./routes/users')
+// app.use('/users', usersRouter)
+// const itemsRouter = require('./routes/items')
+// app.use('/items', itemsRouter)

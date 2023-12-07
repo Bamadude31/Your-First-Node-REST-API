@@ -1,14 +1,14 @@
 {
-  "name": "current-project",
+  "name": "CRUD_Application_Z_Prefix",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "application for Z-Prefix",
+  "main": "server.js",
   "scripts": {
     "devStart": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --require babel-register src/index.js"
   },
-  "author": "",
+  "author": "Bill_Aldridge",
   "license": "ISC",
   "dependencies": {
     "babel-node": "^0.0.1-security",

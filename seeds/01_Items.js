@@ -3,7 +3,8 @@
  * @returns { Promise<void> }
  */
 exports.seed = async function(knex) {
-  // Deletes ALL existing entries
+  // await knex.schema.raw('TRUNCATE "items" CASCADE');
+   // Deletes ALL existing entries
   await knex('items').del();
   // Inserts seed entries
   await knex('items').insert([
